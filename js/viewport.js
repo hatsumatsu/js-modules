@@ -26,16 +26,13 @@ var Viewport = ( function() {
         scrollToSpeed: 2,
 
         // mouse
-        mouseX: 0,
-        mouseY: 0,
-        _mouseX: -1,
-        _mouseY: -1,
         mousePosition: {
             x: 0,
             y: 0,
             factorX: 0.5,
             factorY: 0.5
-        }
+        },
+        _mousePosition : {}
     };
 
     var state = {
@@ -150,18 +147,17 @@ var Viewport = ( function() {
         // mouse movement
         settings.element
             .on( 'mousemove', function( event ) {
+                settings._mousePosition = settings.mousePosition;
+
                 var x = event.pageX;
                 var y = event.pageY;
-
-                settings.mouseX = x;
-                settings.mouseY = y;
 
                 var factorX = ( x / Viewport.getWidth() );
                 var factorY = ( y / Viewport.getHeight() );
 
                 settings.mousePosition = {
-                    x: factorX - 0.5,
-                    y: factorY - 0.5,
+                    x: x,
+                    y: y,
                     factorX: factorX,
                     factorY: factorY
                 }
