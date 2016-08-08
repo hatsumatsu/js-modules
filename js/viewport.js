@@ -149,18 +149,8 @@ var Viewport = ( function() {
             .on( 'mousemove', function( event ) {
                 settings._mousePosition = settings.mousePosition;
 
-                var x = event.pageX;
-                var y = event.pageY;
-
-                var factorX = ( x / Viewport.getWidth() );
-                var factorY = ( y / Viewport.getHeight() );
-
-                settings.mousePosition = {
-                    x: x,
-                    y: y,
-                    factorX: factorX,
-                    factorY: factorY
-                }
+                settings.mousePosition.x = event.pageX;
+                settings.mousePosition.y = event.pageY - settings.scrollTop;
             } );
     }
 
@@ -187,6 +177,18 @@ var Viewport = ( function() {
                 if( settings.scrollTop != settings._scrollTop ) {
                     $( document ).trigger( 'viewport/scroll' );
                 }
+            }
+
+            // mousemove
+            if( settings.mousePosition.x != settings._mousePosition.x
+             || settings.mousePosition.y != settings._mousePosition.y ) {
+                var factorX = ( settings.mousePosition.x / Viewport.getWidth() );
+                var factorY = ( settings.mousePosition.y / Viewport.getHeight() );
+
+                settings.mousePosition.factorX = factorX;
+                settings.mousePosition.factorY = factorY;
+
+                $( document ).trigger( 'viewport/mousemove' );
             }
         }
     }
