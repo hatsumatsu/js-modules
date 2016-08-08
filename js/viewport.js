@@ -147,8 +147,6 @@ var Viewport = ( function() {
         // mouse movement
         settings.element
             .on( 'mousemove', function( event ) {
-                settings._mousePosition = settings.mousePosition;
-
                 settings.mousePosition.x = event.pageX;
                 settings.mousePosition.y = event.pageY - settings.scrollTop;
             } );
@@ -182,6 +180,8 @@ var Viewport = ( function() {
             // mousemove
             if( settings.mousePosition.x != settings._mousePosition.x
              || settings.mousePosition.y != settings._mousePosition.y ) {
+                settings._mousePosition = settings.mousePosition;
+
                 var factorX = ( settings.mousePosition.x / Viewport.getWidth() );
                 var factorY = ( settings.mousePosition.y / Viewport.getHeight() );
 
