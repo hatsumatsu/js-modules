@@ -17,6 +17,8 @@ var Viewport = ( function() {
         // scrolling
         scrollTop: -1,
         _scrollTop: -1,
+        scrollLeft: -1,
+        _scrollLeft: -1,
         scrollDetectionMode: 'scrollEvent', // 'scrollEvent' or 'requestAnimationFrame'
         nowScroll: Date.now(),
         scrollFactor: -1,
@@ -26,6 +28,8 @@ var Viewport = ( function() {
         scrollToSpeed: 2,
 
         // mouse
+        mouseX: 0,
+        mouseY: 0,
         mousePosition: {
             x: 0,
             y: 0,
@@ -147,8 +151,8 @@ var Viewport = ( function() {
         // mouse movement
         settings.element
             .on( 'mousemove', function( event ) {
-                settings.mousePosition.x = event.pageX;
-                settings.mousePosition.y = event.pageY - settings.scrollTop;
+                settings.mouseX = event.pageX - settings.scrollLeft;
+                settings.mouseY = event.pageY - settings.scrollTop;
             } );
     }
 
@@ -172,21 +176,30 @@ var Viewport = ( function() {
                 settings._scrollTop = settings.scrollTop;
                 settings.scrollTop = settings.element.scrollTop();
 
-                if( settings.scrollTop != settings._scrollTop ) {
+                settings._scrollLeft = settings.scrollLeft;
+                settings.scrollLeft = settings.element.scrollLeft();
+
+                if( settings.scrollTop != settings._scrollTop
+                 || settings.scrollLeft != settings._scrollLeft ) {
                     $( document ).trigger( 'viewport/scroll' );
                 }
             }
 
             // mousemove
-            if( settings.mousePosition.x != settings._mousePosition.x
-             || settings.mousePosition.y != settings._mousePosition.y ) {
-                settings._mousePosition = settings.mousePosition;
+            settings._mousePosition = settings.mousePosition;
 
-                var factorX = ( settings.mousePosition.x / Viewport.getWidth() );
-                var factorY = ( settings.mousePosition.y / Viewport.getHeight() );
+            if( settings.mouseX != settings._mousePosition.x
+             || settings.mouseY != settings._mousePosition.y ) {
 
-                settings.mousePosition.factorX = factorX;
-                settings.mousePosition.factorY = factorY;
+                var factorX = ( settings.mouseX / settings.width );
+                var factorY = ( settings.mousePosition.y / settings.height );
+
+                settings.mousePosition = {
+                  x: settings.mouseX,
+                  y: settings.mouseY,
+                  factorX: factorX,
+                  factorY: factorY
+                }
 
                 $( document ).trigger( 'viewport/mousemove' );
             }
@@ -319,6 +332,10 @@ var Viewport = ( function() {
         return settings.scrollTop;
     }
 
+    var getScrollLeft = function() {
+        return settings.scrollLeft;
+    }
+
     var getScrollFactor = function() {
         return settings.scrollFactor;
     }
@@ -333,6 +350,7 @@ var Viewport = ( function() {
         getWidth:           function() { return getWidth() },
         getHeight:          function() { return getHeight() },
         getScrollTop:       function() { return getScrollTop() },
+        getScrollLeft:      function() { return getScrollLeft() },
         getScrollFactor:    function() { return getScrollFactor() },
         getMousePosition:   function() { return getMousePosition() }
     }
