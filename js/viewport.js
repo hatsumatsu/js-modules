@@ -5,7 +5,7 @@
 var Viewport = ( function() {
 
     var settings = {
-        // dimenions
+        // dimensions
         width: 0,
         height: 0,
         documentHeight: 0,
