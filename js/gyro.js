@@ -15,6 +15,11 @@ var Debug = Gyro = ( function() {
             beta: 0,
             gamma: 0
         },
+        _orientation: {
+            alpha: 0,
+            beta: 0,
+            gamma: 0
+        },
         orientationRelative: {
             alpha: 0,
             beta: 0,
@@ -24,7 +29,7 @@ var Debug = Gyro = ( function() {
     }
 
     var state = {
-        supported: false
+        supported: undefined
     }
 
     var init = function() {
@@ -40,7 +45,6 @@ var Debug = Gyro = ( function() {
         promise
             .then( function( controller ) {
                 settings.controller = controller;
-                state.supported = true;
 
                 calibrate();
             } )
@@ -59,7 +63,7 @@ var Debug = Gyro = ( function() {
     }
 
     var onLoop = function() {
-        if( !state.supported ) {
+        if( state.supported === false || !settings.controller ) {
             return false;
         }
 
@@ -74,6 +78,7 @@ var Debug = Gyro = ( function() {
         var gamma = orientation.gamma - settings.calibration.gamma;
         gamma = Math.min( Math.max( gamma, ( settings.maxAngle * -1 ) ), settings.maxAngle )
 
+        settings._orientation = settings.orientation;
         settings.orientation = {
             alpha: alpha,
             beta: beta,
@@ -85,12 +90,20 @@ var Debug = Gyro = ( function() {
             beta: settings.orientation.beta / settings.maxAngle,
             gamma: settings.orientation.gamma / settings.maxAngle
         }
+
+        if( settings._orientation.alpha !== settings.orientation.alpha
+         || settings._orientation.beta !== settings.orientation.beta
+         || settings._orientation.gamma !== settings.orientation.gamma ) {
+            state.supported = true;
+
+            $( document ).trigger( 'gyro/move' );
+        }
     }
 
     var calibrate = function() {
         Debug.log( 'Gyro.calibrate()' );
 
-        if( !state.supported ) {
+        if( state.supported === false ) {
             return false;
         }
 
