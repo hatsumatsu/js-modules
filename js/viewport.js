@@ -344,6 +344,10 @@ var Viewport = ( function() {
         return settings.mousePosition;
     }
 
+    var get = function( key ) {
+        return settings[key] || false;
+    }
+
     return {
         init:               function() { init(); },
         scrollTo:           function( target, offset, animate ) { scrollTo( target, offset, animate ) },
@@ -352,7 +356,8 @@ var Viewport = ( function() {
         getScrollTop:       function() { return getScrollTop() },
         getScrollLeft:      function() { return getScrollLeft() },
         getScrollFactor:    function() { return getScrollFactor() },
-        getMousePosition:   function() { return getMousePosition() }
+        getMousePosition:   function() { return getMousePosition() },
+        get:                function( key ) { return get( key ) }
     }
 
 } )();
