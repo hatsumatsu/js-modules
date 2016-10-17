@@ -2,7 +2,7 @@
  * Gyro
  * requires fulltilt.js https://github.com/adtile/Full-Tilt
  */
-var Debug = Gyro = ( function() {
+var Gyro = ( function() {
 
     var settings = {
         calibration: {
