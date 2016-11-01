@@ -10,7 +10,10 @@ var Sections = ( function() {
             id: undefined
         },
         offset: 0,
-        snap: false
+        snap: false,
+        snapeDelay: 1000,
+        snapSpeed: 250,
+        snapDebouncer: null
     }
 
     var selector = {
@@ -62,6 +65,14 @@ var Sections = ( function() {
                     $( document ).trigger( 'sections/leave', [{ section: settings._current }] );
                 }
             }
+        }
+
+        // debounce
+        if( settings.snap ) {
+            clearTimeout( settings.snapDebouncer );
+            settings.snapDebouncer = setTimeout( function() {
+                snap();
+            }, settings.snapeDelay );
         }
     }
 
@@ -120,6 +131,16 @@ var Sections = ( function() {
         } );
 
         Debug.log( cache );
+    }
+
+    var snap = function() {
+        Debug.log( 'Sections.snap();' );
+
+        var section = settings.current.section;
+
+        if( Viewport.scrollTo ) {
+            Viewport.scrollTo( section, 0, true );
+        }
     }
 
     return {
