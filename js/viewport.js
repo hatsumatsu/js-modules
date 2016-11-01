@@ -9,6 +9,8 @@ var Viewport = ( function() {
         width: 0,
         height: 0,
         documentHeight: 0,
+        pixelRatio: 1,
+        maxPixelRatio: 2,
 
         // time
         nowLoop: Date.now(),
@@ -212,6 +214,10 @@ var Viewport = ( function() {
         settings.width = settings.element.width();
         settings.height = settings.element.height();
         settings.documentHeight = $( 'html' ).outerHeight();
+        settings.pixelRatio = window.devicePixelRatio || 1;
+        if( settings.pixelRatio > settings.maxPixelRatio ) {
+            settings.pixelRatio = settings.maxPixelRatio;
+        }
     }
 
     var onScroll = function() {
