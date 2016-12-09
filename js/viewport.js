@@ -49,7 +49,7 @@ var Viewport = ( function() {
     }
 
     var init = function() {
-        Debug.log( 'viewport.init()' );
+        Debug.log( 'Viewport.init()' );
 
         settings.element = $( window );
 
@@ -209,7 +209,7 @@ var Viewport = ( function() {
     }
 
     var onResizeFinish = function() {
-        Debug.log( 'viewport.onResizeFinish()' );
+        Debug.log( 'Viewport.onResizeFinish()' );
 
         settings.width = settings.element.width();
         settings.height = settings.element.height();
@@ -221,7 +221,7 @@ var Viewport = ( function() {
     }
 
     var onScroll = function() {
-        Debug.log( 'viewport.onScroll()' );
+        Debug.log( 'Viewport.onScroll()' );
 
         settings.scrollFactor = settings.scrollTop / ( settings.height - settings.documentHeight ) * -1;
 
@@ -287,7 +287,7 @@ var Viewport = ( function() {
     }
 
     var scrollTo = function( target, offset, animate ) {
-        Debug.log( 'viewport.scrollTo()' );
+        Debug.log( 'Viewport.scrollTo()' );
         Debug.log( target );
 
         var top = 0;
