@@ -51,12 +51,13 @@ var Path = ( function() {
                 Debug.log( 'popstate event', event, event.originalEvent.state );
 
                 if( event.originalEvent.state !== null ) {
-                    checkForChange();
+                    var url = location.href;
+                    checkForChange( url );
                 }
             } )
             // native hash change
             .on( 'hashchange', function() {
-                checkForChange();
+                checkForChange( url );
             } );
 
         $( document )
@@ -69,14 +70,14 @@ var Path = ( function() {
             .on( 'click', selector.link, function( event ) {
                 event.preventDefault();
 
-                var href = $( this ).attr( 'href' );
+                var url = $( this ).attr( 'href' );
                 history.pushState(
                     {},
                     '',
-                    href
+                    url
                 );
 
-                checkForChange();
+                checkForChange( url );
             } );
     }
 
@@ -90,8 +91,12 @@ var Path = ( function() {
 
     }
 
-    var checkForChange = function() {
-        Debug.log( 'Path.checkForChange()' );
+    var checkForChange = function( url ) {
+        Debug.log( 'Path.checkForChange()', url );
+
+        if( !url ) {
+            return false;
+        }
 
         state.url.previous = state.url.current;
         state.url.current = location.href;
