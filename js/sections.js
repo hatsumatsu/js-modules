@@ -40,13 +40,13 @@ var Sections = ( function() {
                 onResize();
             } )
             .on( 'sections/change', function( event, data ) {
-                onChange( data.section );
+                onChange( data.section, data.index );
             } )
             .on( 'sections/leave', function( event, data ) {
-                onLeave( data.section );
+                onLeave( data.section, data.index );
             } )
             .on( 'sections/enter', function( event, data ) {
-                onEnter( data.section );
+                onEnter( data.section, data.index );
             } );
     }
 
@@ -60,9 +60,9 @@ var Sections = ( function() {
                 if( cache[i].id !== settings._current.id || !settings.current.id ) {
                     settings.current = cache[i];
 
-                    $( document ).trigger( 'sections/change', [{ section: settings.current }] );
-                    $( document ).trigger( 'sections/enter', [{ section: settings.current }] );
-                    $( document ).trigger( 'sections/leave', [{ section: settings._current }] );
+                    $( document ).trigger( 'sections/change', [{ section: settings.current, index: i }] );
+                    $( document ).trigger( 'sections/enter', [{ section: settings.current, index: i }] );
+                    $( document ).trigger( 'sections/leave', [{ section: settings._current, index: i }] );
                 }
             }
         }
@@ -82,16 +82,32 @@ var Sections = ( function() {
         buildCache();
     }
 
-    var onChange = function( section ) {
-        Debug.log( 'Sections.onChange()', section );
+    var onChange = function( section, index ) {
+        Debug.log( 'Sections.onChange()', section, index );
 
         if( !section.id ) {
             return false;
         }
+
+        for( var i = 0; i < cache.length; i++ ) {
+            cache[i].section
+                .removeClass( 'before' )
+                .removeClass( 'after' );
+
+            if( i < index ) {
+                cache[i].section
+                    .addClass( 'before' );
+            }
+
+            if( i > index ) {
+                cache[i].section
+                    .addClass( 'after' );
+            }
+        }
     }
 
-    var onEnter = function( section ) {
-        Debug.log( 'Sections.onEnter()', section );
+    var onEnter = function( section, index ) {
+        Debug.log( 'Sections.onEnter()', section, index );
 
         if( !section.id ) {
             return false;
@@ -101,8 +117,8 @@ var Sections = ( function() {
             .addClass( 'current' );
     }
 
-    var onLeave = function( section ) {
-        Debug.log( 'Sections.onLeave()', section );
+    var onLeave = function( section, index ) {
+        Debug.log( 'Sections.onLeave()', section, index );
 
         if( !section.id ) {
             return false;
