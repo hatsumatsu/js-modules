@@ -189,13 +189,14 @@ var Viewport = ( function() {
     var onScroll = function() {
         Debug.log( 'Viewport.onScroll()' );
 
+/*
         // time for scroll/finish event
         clearTimeout( settings.scrollTimer  );
         settings.scrollTimer = setTimeout( function() {
           clearTimeout( settings.scrollTimer  );
           $( document ).trigger( 'viewport/scroll/finish' );
         }, 200 );
-
+*/
         settings.scrollFactor = settings.scrollTop / ( settings.height - settings.documentHeight ) * -1;
 
         // top
